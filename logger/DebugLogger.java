@@ -3,13 +3,13 @@ package logger;
 import java.util.Objects;
 
 class DebugLogger extends Logger {
-    DebugLogger(Logger nextLogger) {
-        super(nextLogger);
+    DebugLogger(Logger nextLogger,LoggerSubject loggerSubject) {
+        super(nextLogger,loggerSubject);
     }
 
     void handle(String message, String level) {
         if (Objects.equals(level, "DEBUG")) {
-            System.out.println("DEBUG: " + message);
+            loggerSubject.notifyObservers("DEBUG","DEBUG: " + message);
         }
         if (nextLogger != null) {
             nextLogger.handle(message, level);

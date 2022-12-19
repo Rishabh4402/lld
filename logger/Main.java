@@ -2,7 +2,8 @@ package logger;
 
 class Main {
     public static void main(String[] args) {
-        LoggerService loggerService = new LoggerService();
-        loggerService.log("Hello", "ERROR");
+        Logger logger = LoggerService.getInstance();
+        LoggerService.addObserver("INFO",new FileObserver());
+        logger.log("INFO","Hello Observer pattern");
     }
 }
