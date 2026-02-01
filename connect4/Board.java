@@ -7,7 +7,7 @@ public class Board {
     private Integer row = 7;
     private Integer column = 6;
     private Integer range = 4;
-    private int[][] directions = {{0, -1}, {0, 1}, {1, 0}, {-1, 0}, {1, 1}, {-1, -1}};
+    private int[][] directions = {{0, 1}, {1, 0}, {1, 1}, {-1, 1}};
 
     Board(Integer row, Integer column) {
         this.row = row;
@@ -18,51 +18,31 @@ public class Board {
     boolean checkWinner(Player player) {
         for (int i = 0; i < column; i++) {
             for (int j = 0; j < row; j++) {
-                if (checkLeft(player, i, j) ||
-                        checkRight(player, i, j) ||
-                        checkTop(player, i, j) ||
-                        checkBottom(player, i, j)) {
-                    return true;
+                for (int k = 0; k < directions.length; k++) {
+                    if (getSum(i, j, player, directions[k])) {
+                        return true;
+                    }
                 }
             }
         }
         return false;
     }
 
-    private boolean checkBottom(Player player, Integer i, Integer j) {
-        if (j - range < 0) {
-            return false;
-        }
-        return getSum(i, j, player, directions[0]);
-    }
-
     private boolean getSum(Integer i, Integer j, Player player, int[] direction) {
         int sum = 0;
         for (int x = 0; x < range; x++) {
+
             sum += equalsColor(x * direction[0] + i, x * direction[1] + j, player.getColor()) ? 1 : 0;
+
         }
         return sum == range;
     }
 
-    private boolean checkTop(Player player, Integer i, Integer j) {
-        if (j + range >= column) {
+    private boolean checkValidColumn(Integer i, Integer j) {
+        if (i < 0 || j < 0 || i >= column || j >= row) {
             return false;
         }
-        return getSum(i, j, player, directions[1]);
-    }
-
-    private boolean checkRight(Player player, Integer i, Integer j) {
-        if (i + range >= row) {
-            return false;
-        }
-        return getSum(i, j, player, directions[2]);
-    }
-
-    private boolean checkLeft(Player player, Integer i, Integer j) {
-        if (i - range < 0) {
-            return false;
-        }
-        return getSum(i, j, player, directions[3]);
+        return true;
     }
 
     void move(Player player, Integer col) throws InvalidDataException {
@@ -101,7 +81,7 @@ public class Board {
 
     private boolean equalsColor(Integer i, Integer j, Color color) {
         if (color == null) return false;
-        return color.equals(this.board[i][j]);
+        return checkValidColumn(i, j) && color.equals(this.board[i][j]);
     }
 
     public void printBoard() {

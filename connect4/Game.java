@@ -41,7 +41,6 @@ public class Game {
 
                 } else {
                     currentPlayer = playerA;
-                    board.checkWinner(playerB);
                 }
             } catch (Exception exception) {
                 System.out.println(exception.getMessage());
