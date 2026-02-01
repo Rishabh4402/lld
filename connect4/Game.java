@@ -1,7 +1,5 @@
 package connect4;
 
-import com.sun.media.sound.InvalidDataException;
-
 import java.util.Scanner;
 
 public class Game {
@@ -25,24 +23,28 @@ public class Game {
 
     }
 
-    public void execute() throws InvalidDataException {
+    public void execute() {
         Scanner scanner = new Scanner(System.in);
         while (true) {
-            System.out.println(String.format("Player %s: Enter the move", currentPlayer.getName()));
-            int col = scanner.nextInt();
-            board.move(currentPlayer, col);
-            board.printBoard();
-            if (board.checkWinner(currentPlayer)) {
-                System.out.println(String.format("Winner Player %s", currentPlayer.getName()));
-                break;
-            }
+            try {
+                System.out.println(String.format("Player %s: Enter the move", currentPlayer.getName()));
+                int col = scanner.nextInt();
+                board.move(currentPlayer, col);
+                board.printBoard();
+                if (board.checkWinner(currentPlayer)) {
+                    System.out.println(String.format("Winner Player %s", currentPlayer.getName()));
+                    break;
+                }
 
-            if (currentPlayer.equals(playerA)) {
-                currentPlayer = playerB;
+                if (currentPlayer.equals(playerA)) {
+                    currentPlayer = playerB;
 
-            } else {
-                currentPlayer = playerA;
-                board.checkWinner(playerB);
+                } else {
+                    currentPlayer = playerA;
+                    board.checkWinner(playerB);
+                }
+            } catch (Exception exception) {
+                System.out.println(exception.getMessage());
             }
         }
     }
